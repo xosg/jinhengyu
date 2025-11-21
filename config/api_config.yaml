@@ -1,0 +1,215 @@
+# API Integration Configuration
+# This file defines third-party API service configurations
+
+# =============================================================================
+# Email Service Configuration
+# =============================================================================
+email_service:
+  # Provider is automatically determined by EMAIL_PROVIDER in .env
+  # Change EMAIL_PROVIDER in .env to switch: "outlook" or "qq"
+  # This setting is dynamically overridden by the factory function
+  provider: "QQMailSMTP"
+
+  # Outlook/Office 365 SMTP Configuration
+  outlook_smtp:
+    smtp_server: "smtp.office365.com"
+    smtp_port: 587
+    use_tls: true
+    username: "${ENV:OUTLOOK_USER}"
+    password: "${ENV:OUTLOOK_PASSWORD}"
+    default_sender: "${ENV:OUTLOOK_USER}"
+
+  # QQ Mail SMTP Configuration (Now Enabled!)
+  # QQ Mail uses SSL on port 465, not TLS on port 587
+  qqmail_smtp:
+    smtp_server: "smtp.qq.com"
+    smtp_port: 465
+    use_tls: false
+    use_ssl: true
+    username: "${ENV:QQMAIL_USER}"
+    password: "${ENV:QQMAIL_PASSWORD}"
+    default_sender: "${ENV:QQMAIL_USER}"
+
+  # Alternative: Gmail SMTP Configuration (if you have Gmail access)
+  # gmail_smtp:
+  #   smtp_server: "smtp.gmail.com"
+  #   smtp_port: 587
+  #   use_tls: true
+  #   username: "${ENV:GMAIL_USER}"
+  #   password: "${ENV:GMAIL_APP_PASSWORD}"
+  #   default_sender: "${ENV:GMAIL_USER}"
+
+  # Future: SendGrid configuration (when switching to paid service)
+  # sendgrid:
+  #   api_key: "${ENV:SENDGRID_API_KEY}"
+  #   default_sender: "noreply@yourdomain.com"
+
+  # Email sending settings
+  settings:
+    retry_attempts: 3
+    timeout_seconds: 30
+    max_recipients: 50
+
+# =============================================================================
+# Storage Service Configuration
+# =============================================================================
+storage_service:
+  # Provider: "MockS3" (free, local filesystem), "MinIO" (S3-compatible), or "AWSS3" (paid, future)
+  provider: "MinIO"
+
+  # Mock S3 Configuration (local filesystem)
+  mock_s3:
+    base_path: "collected_data/mock_s3"
+    create_buckets_automatically: true
+    default_bucket: "default-bucket"
+
+  # MinIO Configuration (S3-compatible object storage)
+  minio:
+    endpoint: "${ENV:MINIO_ENDPOINT}"  # e.g., "localhost:9000"
+    access_key: "${ENV:MINIO_ACCESS_KEY}"
+    secret_key: "${ENV:MINIO_SECRET_KEY}"
+    secure: false  # Set to true if using HTTPS
+    create_buckets_automatically: true
+    default_bucket: "research-reports"
+
+  # Future: AWS S3 configuration (when switching to paid service)
+  # aws_s3:
+  #   access_key_id: "${ENV:AWS_ACCESS_KEY_ID}"
+  #   secret_access_key: "${ENV:AWS_SECRET_ACCESS_KEY}"
+  #   region: "us-east-1"
+  #   default_bucket: "my-production-bucket"
+
+  # Storage settings
+  settings:
+    retry_attempts: 3
+    timeout_seconds: 60
+    max_file_size_mb: 100
+
+# =============================================================================
+# E-Signature Service Configuration
+# =============================================================================
+signature_service:
+  # Provider: "MockDocuSign" (simulated), "DocuSign" (real), or "PandaDoc" (real)
+  # Change to use different signature service
+  provider: "PandaDoc"
+
+  # Mock DocuSign Configuration
+  mock_docusign:
+    output_dir: "collected_data/signatures"
+    simulate_delay_seconds: 2  # Simulate API delay
+    default_signer_name: "Test Signer"
+    default_signer_email: "${ENV:OUTLOOK_USER}"
+
+  # Real DocuSign API Configuration
+  # To use real DocuSign:
+  # 1. Create a DocuSign Developer account (https://developers.docusign.com/)
+  # 2. Create an integration key (App) in your developer account
+  # 3. Generate RSA keypair and add public key to your integration
+  # 4. Save private key file and set path in DOCUSIGN_PRIVATE_KEY_PATH
+  # 5. Get your User ID (GUID) and Account ID from DocuSign
+  # 6. Set environment variables and change provider to "DocuSign"
+  docusign:
+    integration_key: "${ENV:DOCUSIGN_INTEGRATION_KEY}"
+    user_id: "${ENV:DOCUSIGN_USER_ID}"
+    account_id: "${ENV:DOCUSIGN_ACCOUNT_ID}"
+    private_key_path: "${ENV:DOCUSIGN_PRIVATE_KEY_PATH}"
+    base_path: "https://demo.docusign.net/restapi"  # Use demo environment
+    oauth_host_name: "account-d.docusign.com"  # Demo OAuth host
+    output_dir: "collected_data/signatures"
+
+    # For production, use:
+    # base_path: "https://na3.docusign.net/restapi"  # or your region
+    # oauth_host_name: "account.docusign.com"
+
+  # Real PandaDoc API Configuration
+  # To use PandaDoc:
+  # 1. Sign up at https://www.pandadoc.com/
+  # 2. Go to Settings → API Keys
+  # 3. Create an API key
+  # 4. Set PANDADOC_API_KEY in .env
+  # 5. Change provider to "PandaDoc"
+  pandadoc:
+    api_key: "${ENV:PANDADOC_API_KEY}"
+    output_dir: "collected_data/signatures"
+
+  # Signature settings
+  settings:
+    retry_attempts: 3
+    timeout_seconds: 30
+    generate_pdf: true
+
+# =============================================================================
+# Search Service Configuration
+# =============================================================================
+search_service:
+  # Provider: "MockGoogleSearch" (free, simulated) or "GoogleSearch" (real API)
+  provider: "GoogleSearch"
+
+  # Mock Google Search Configuration
+  mock_google_search:
+    simulate_delay_seconds: 1
+    results_per_query: 10
+    include_snippets: true
+
+  # Real Google Custom Search API Configuration
+  # Change provider to "GoogleSearch" to enable
+  google_search:
+    api_key: "${ENV:GOOGLE_API_KEY}"
+    search_engine_id: "${ENV:GOOGLE_SEARCH_ENGINE_ID}"
+    results_per_query: 10
+
+  # Search settings
+  settings:
+    retry_attempts: 3
+    timeout_seconds: 10
+    cache_results: false
+
+# =============================================================================
+# Physical Mail Service Configuration (Optional)
+# =============================================================================
+mail_service:
+  # Provider: "MockLob" (free, simulated) or "Lob" (paid, future)
+  provider: "MockLob"
+
+  # Mock Lob Configuration
+  mock_lob:
+    output_dir: "collected_data/physical_mail"
+    simulate_delay_seconds: 2
+    default_from_address:
+      name: "Test Company"
+      street: "123 Test Street"
+      city: "San Francisco"
+      state: "CA"
+      zip: "94107"
+
+  # Future: Lob.com configuration (when switching to paid service)
+  # lob:
+  #   api_key: "${ENV:LOB_API_KEY}"
+  #   test_mode: true
+
+  # Mail settings
+  settings:
+    retry_attempts: 3
+    timeout_seconds: 30
+
+# =============================================================================
+# General API Settings
+# =============================================================================
+logging:
+  log_file: "logs/api_call_log.jsonl"
+  log_level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  log_request_params: true
+  log_response_data: true
+
+error_handling:
+  retry_attempts: 3
+  retry_delay_seconds: 5
+  continue_on_error: true
+
+# Security
+security:
+  # Never commit sensitive credentials to version control!
+  # Use environment variables for all secrets
+  # Pattern: ${ENV:VARIABLE_NAME}
+  validate_ssl: true
+  timeout_seconds: 30

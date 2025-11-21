@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(test/test_file.txt)",
+      "Bash(del testtest_file.txt)",
+      "Bash(test/demo.txt)",
+      "Bash(test/outlook_test.txt)",
+      "Bash(test/progress_test.txt)",
+      "Bash(test/final_test.txt)",
+      "Bash(taskkill:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "Bash(gh api:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

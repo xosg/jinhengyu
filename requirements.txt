@@ -1,0 +1,48 @@
+# Multi-Source Data Collection & API Integration System
+# Requirements for Python 3.8+
+
+# Web Scraping
+requests>=2.31.0
+selenium>=4.15.0
+beautifulsoup4>=4.12.0
+webdriver-manager>=4.0.1  # Auto-download browser drivers
+
+# Email Handling
+# imaplib and smtplib are built-in (no need to install)
+
+# File Type Detection
+python-magic-bin>=0.4.14; platform_system=="Windows"  # Windows binary
+python-magic>=0.4.27; platform_system!="Windows"      # Linux/Mac
+filetype>=1.2.0  # Alternative file type detection
+
+# Configuration
+PyYAML>=6.0.1
+python-dotenv>=1.0.0  # Environment variable management
+
+# Google APIs
+google-api-python-client>=2.110.0  # Google Custom Search API
+
+# DocuSign E-Signature
+docusign-esign>=3.24.0  # DocuSign Python SDK
+
+# PandaDoc E-Signature
+pandadoc-python-client>=6.2.0  # PandaDoc Python SDK
+
+# PDF Generation
+reportlab>=4.0.0  # PDF generation from text/scraped content
+
+# Object Storage
+minio>=7.2.0  # MinIO S3-compatible storage client
+
+# Logging & Utilities
+tqdm>=4.66.0  # Progress bars
+
+# File System Monitoring
+watchdog>=3.0.0  # Monitor file system changes
+
+# Optional: For more robust HTML parsing
+lxml>=4.9.0
+
+# Development/Testing (optional)
+# pytest>=7.4.0
+# pytest-mock>=3.12.0

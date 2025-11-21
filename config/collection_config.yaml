@@ -1,0 +1,191 @@
+# Data Collection Configuration
+# This file defines rules for web scraping and email monitoring
+
+# =============================================================================
+# Web Scraping Configuration
+# =============================================================================
+web_scraping:
+  # Static website scraping (using requests)
+  static_sites:
+    - name: "Example Domain"
+      url: "https://example.com"
+      enabled: true
+      extract_elements:
+        - selector: "h1"
+          type: "text"
+        - selector: "p"
+          type: "list"
+        - selector: "a"
+          type: "list"
+      output_dir: "collected_data/web/static"
+
+    - name: "Wikipedia - Python"
+      url: "https://en.wikipedia.org/wiki/Python_(programming_language)"
+      enabled: true
+      extract_elements:
+        - selector: "h1"
+          type: "text"
+        - selector: "p"
+          type: "list"
+        - selector: ".infobox"
+          type: "text"
+      output_dir: "collected_data/web/static"
+
+    - name: "GitHub - Python Repo"
+      url: "https://github.com/python/cpython"
+      enabled: true
+      extract_elements:
+        - selector: "h1"
+          type: "text"
+        - selector: "p"
+          type: "list"
+        - selector: ".markdown-body"
+          type: "text"
+      output_dir: "collected_data/web/static"
+
+    - name: "Quotes to Scrape"
+      url: "https://quotes.toscrape.com/"
+      enabled: true
+      extract_elements:
+        - selector: ".quote .text"
+          type: "list"
+        - selector: ".author"
+          type: "list"
+        - selector: ".tag"
+          type: "list"
+      output_dir: "collected_data/web/static"
+
+    - name: "Books to Scrape"
+      url: "https://books.toscrape.com/"
+      enabled: true
+      extract_elements:
+        - selector: "h1"
+          type: "text"
+        - selector: "article.product_pod h3 a"
+          type: "list"
+        - selector: ".price_color"
+          type: "list"
+      output_dir: "collected_data/web/static"
+
+  # Dynamic website scraping (using Selenium)
+  dynamic_sites:
+    - name: "Example Dashboard"
+      url: "https://example.com/dashboard/login"
+      enabled: false  # Set to true when ready to use
+      requires_login: true
+      login_config:
+        username_field: "input[name='username']"  # CSS selector
+        password_field: "input[name='password']"
+        submit_button: "button[type='submit']"
+        # Credentials from environment variables (never hardcode!)
+        username: "${ENV:DASHBOARD_USERNAME}"
+        password: "${ENV:DASHBOARD_PASSWORD}"
+      wait_for_element: "div.dashboard-content"  # Element that indicates page loaded
+      extract_elements:
+        - selector: "div.widget"
+          type: "list"
+      pagination:
+        enabled: true
+        next_button_selector: "button.next-page"
+        max_pages: 10
+      output_dir: "collected_data/web/dynamic"
+
+  # Browser settings for Selenium
+  browser:
+    headless: true  # Run without visible browser window
+    driver: "chrome"  # or "firefox"
+    timeout: 30  # seconds
+
+# =============================================================================
+# Email Monitoring Configuration
+# =============================================================================
+email_monitoring:
+  # Outlook/Office 365 IMAP configuration
+  imap_server: "outlook.office365.com"
+  imap_port: 993
+  use_ssl: true
+
+  # Credentials (from environment variables)
+  # Note: Use Outlook App Password if you have 2FA enabled, or regular password
+  username: "${ENV:OUTLOOK_USER}"
+  password: "${ENV:OUTLOOK_PASSWORD}"
+
+  # Email filtering rules
+  filters:
+    - name: "Reports from Company"
+      enabled: true
+      sender: "reports@company.com"
+      subject_contains: "Daily Report"
+      date_range:
+        days_back: 7  # Fetch emails from last 7 days
+      download_attachments: true
+      attachment_types: ["pdf", "xlsx", "docx"]
+      output_dir: "collected_data/email/company_reports"
+
+    - name: "Invoices"
+      enabled: true
+      sender: "billing@example.com"
+      subject_contains: "Invoice"
+      date_range:
+        days_back: 30
+      download_attachments: true
+      attachment_types: ["pdf"]
+      output_dir: "collected_data/email/invoices"
+
+  # Attachment handling
+  attachments:
+    max_size_mb: 25  # Skip attachments larger than this
+    organize_by_type: true  # Create subdirectories by file type
+    supported_types:
+      - pdf
+      - xlsx
+      - docx
+      - jpg
+      - png
+
+# =============================================================================
+# General Settings
+# =============================================================================
+logging:
+  log_file: "logs/collection_log.jsonl"
+  log_level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+
+error_handling:
+  retry_attempts: 3
+  retry_delay_seconds: 5
+  skip_corrupted_files: true
+  continue_on_error: true
+
+output:
+  compress_results: false  # Set to true to create ZIP archives
+  timestamp_folders: true  # Add timestamp to output folder names
+
+# =============================================================================
+# File Watching Configuration
+# =============================================================================
+file_watching:
+  # Directories to monitor for changes
+  watched_directories:
+    - name: "Test Directory"
+      path: "./test"  # Directory to watch (relative or absolute)
+      enabled: true
+      recursive: false  # Watch subdirectories as well
+      notify_on_change: true  # Send email when files change
+      # Email notification settings
+      notify_email: "${ENV:NOTIFY_EMAIL}"  # Recipient email (e.g., your QQ Mail)
+      from_email: null  # Sender email (optional, uses default if not specified)
+
+    # Example: Watch another directory
+    # - name: "Documents Directory"
+    #   path: "C:/Users/YourName/Documents/watched"
+    #   enabled: false
+    #   recursive: true
+    #   notify_on_change: true
+    #   notify_email: "${ENV:NOTIFY_EMAIL}"
+
+  # File watching settings
+  settings:
+    debounce_delay_seconds: 2  # Wait time to batch multiple file changes
+    max_file_size_mb: 100  # Skip files larger than this (email attachment limit)
+    send_email_on_change: true  # Global toggle for email notifications
+    cooldown_seconds: 10  # Prevent duplicate emails for same file within this time

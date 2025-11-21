@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 32px;
+        }
+        .header p {
+            margin: 5px 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .summary {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        .summary h2 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .stat {
+            text-align: center;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .site-section {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .site-header {
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .site-header h2 {
+            margin: 0 0 10px 0;
+            color: #667eea;
+            font-size: 24px;
+        }
+        .site-url {
+            font-size: 14px;
+            color: #666;
+            word-break: break-all;
+        }
+        .site-url a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        .site-url a:hover {
+            text-decoration: underline;
+        }
+        .screenshot-box {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .screenshot-box img {
+            max-width: 100%;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .screenshot-caption {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+        }
+        .content-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .content-box h3 {
+            margin-top: 0;
+            color: #667eea;
+            font-size: 18px;
+        }
+        .content-box ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .content-box li {
+            margin: 8px 0;
+        }
+        .metadata {
+            font-size: 13px;
+            color: #666;
+            background-color: #f8f9fa;
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        .metadata strong {
+            color: #333;
+        }
+        code {
+            background-color: #e0e0e0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .footer {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            border-top: 3px solid #667eea;
+            font-size: 13px;
+            color: #666;
+            text-align: center;
+        }
+        .footer strong {
+            color: #333;
+        }
+        .divider {
+            height: 2px;
+            background: linear-gradient(to right, transparent, #667eea, transparent);
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Multi-Site Web Scraping Report</h1>
+        <p>Automated data collection and analysis</p>
+        <p>Generated: {{timestamp}}</p>
+    </div>
+
+    <div class="summary">
+        <h2>Executive Summary</h2>
+        <div class="summary-stats">
+            <div class="stat">
+                <div class="stat-value">{{total_sites}}</div>
+                <div class="stat-label">Websites Scraped</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">{{total_elements}}</div>
+                <div class="stat-label">Total Elements</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">{{total_screenshots}}</div>
+                <div class="stat-label">Screenshots Captured</div>
+            </div>
+        </div>
+    </div>
+
+    {{site_sections}}
+
+    <div class="footer">
+        <p><strong>🤖 Generated by:</strong> Multi-Source Data Collection & API Integration System</p>
+        <p><strong>Architecture:</strong> Module 1 (Data Collection) + Module 2 (Email API)</p>
+        <p><strong>Technologies:</strong> Python • BeautifulSoup • Selenium • Outlook SMTP • YAML Configuration</p>
+        <p style="margin-top: 15px;">This automated report demonstrates the integration of web scraping, browser automation, and email API services.</p>
+    </div>
+</body>
+</html>
